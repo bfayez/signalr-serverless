@@ -2,16 +2,17 @@
 
 Get the SignalR Serverless application running locally in minutes.
 
-## 🚀 Option 1: GitHub Codespaces (Easiest)
+## 🚀 Option 1: GitHub Codespaces (Easiest for Tool Setup)
 
-**The fastest way to get started - no local setup required!**
+**GitHub Codespaces automatically installs all required tools but requires manual configuration.**
 
 1. Click the **"Code"** button on the GitHub repository
 2. Select **"Create codespace on main"** (or your branch)
-3. Wait for the environment to load (2-3 minutes)
-4. Skip to [Step 2: Configure Azure SignalR](#step-2-configure-azure-signalr)
+3. Wait for tools to install (2-3 minutes)
+4. Follow the complete setup guide: [CODESPACES_SETUP.md](./CODESPACES_SETUP.md)
 
-See [CODESPACES_QUICK_START.md](./CODESPACES_QUICK_START.md) for detailed Codespaces instructions.
+**What's automated**: Tool installation (.NET, Node.js, Azure Functions Core Tools, Angular CLI, Azure CLI)  
+**What's manual**: Azure SignalR setup, dependency installation, configuration, running the app
 
 ## 💻 Option 2: Local Development
 

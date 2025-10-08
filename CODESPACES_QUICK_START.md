@@ -1,14 +1,36 @@
 # 🎯 GitHub Codespaces Quick Reference
 
-## Getting Started (First Time Setup)
+## Automatic Setup (Tools Only)
 
-1. **Wait for the environment to load** - Dependencies are automatically installed
-2. **Configure SignalR Connection**:
+When you open this project in GitHub Codespaces, the following tools are automatically installed:
+- ✅ .NET 9.0 SDK
+- ✅ Node.js 18.x
+- ✅ Azure Functions Core Tools v4
+- ✅ Angular CLI
+- ✅ Azure CLI
+- ✅ VS Code extensions
+
+**⚠️ You must manually configure and run the application - See [CODESPACES_SETUP.md](CODESPACES_SETUP.md)**
+
+## Quick Setup Steps
+
+1. **Create Azure SignalR Service** (Free tier, Serverless mode)
+2. **Configure Backend**:
    ```bash
-   code functions/local.settings.json
-   # Add your Azure SignalR connection string
+   cd functions
+   dotnet restore
+   cp local.settings.json.example local.settings.json
+   # Edit local.settings.json with your SignalR connection string
+   dotnet build
    ```
-3. **Press F5** to start debugging both backend and frontend
+3. **Configure Frontend**:
+   ```bash
+   cd client
+   npm install
+   ```
+4. **Run**: Press F5 or use manual commands
+
+📖 **Full instructions**: [CODESPACES_SETUP.md](CODESPACES_SETUP.md)
 
 ## Debug Configurations
 

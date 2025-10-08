@@ -1,41 +1,53 @@
 # GitHub Codespaces Development Guide
 
-This project is fully configured for development in GitHub Codespaces with support for debugging both the .NET 9.0 Azure Functions backend and the Angular frontend.
+This project is configured for development in GitHub Codespaces with automatic tool installation and manual configuration.
 
 ## 🚀 Quick Start
 
 ### 1. Open in Codespaces
 
-Click the "Code" button on GitHub and select "Open with Codespaces" to create a new codespace. The environment will automatically set up:
+Click the "Code" button on GitHub and select "Open with Codespaces" to create a new codespace. The environment will automatically install:
 
 - ✅ .NET 9.0 SDK
 - ✅ Node.js 18.x
 - ✅ Azure Functions Core Tools v4
 - ✅ Angular CLI
-- ✅ All project dependencies
+- ✅ Azure CLI
+- ✅ All required VS Code extensions
 
-### 2. Configure Azure SignalR Connection
+**⚠️ The application is NOT automatically configured or started.**
 
-After the codespace loads, update the SignalR connection string:
+### 2. Manual Configuration Required
+
+After the codespace loads, you need to:
+
+1. **Create Azure SignalR Service** (Free tier)
+2. **Configure backend** with connection string
+3. **Install dependencies** for both backend and frontend
+4. **Run the application**
+
+📖 **See [CODESPACES_SETUP.md](../CODESPACES_SETUP.md) for complete step-by-step instructions.**
+
+### 3. Quick Setup Commands
 
 ```bash
-# Edit the local.settings.json file
-code functions/local.settings.json
+# 1. Configure backend
+cd functions
+dotnet restore
+cp local.settings.json.example local.settings.json
+# Edit local.settings.json with your Azure SignalR connection string
+dotnet build
+
+# 2. Configure frontend
+cd client
+npm install
+
+# 3. Run (choose one option):
+# Option A: Press F5 (Debug Full Stack)
+# Option B: Manual terminals
+#   Terminal 1: cd functions && func start
+#   Terminal 2: cd client && npm start
 ```
-
-Replace the placeholder with your actual Azure SignalR connection string:
-
-```json
-{
-  "Values": {
-    "AzureSignalRConnectionString": "Endpoint=https://YOUR-SIGNALR.service.signalr.net;AccessKey=YOUR-KEY;Version=1.0;"
-  }
-}
-```
-
-### 3. Start Debugging
-
-You have several options to run and debug the application:
 
 #### Option 1: Debug Full Stack (Recommended)
 1. Press `F5` or click "Run and Debug" in the sidebar

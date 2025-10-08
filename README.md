@@ -65,12 +65,14 @@ signalr-serverless/
 
 ### 🚀 Quick Start with GitHub Codespaces
 
-The easiest way to get started is using GitHub Codespaces:
+The easiest way to get started is using GitHub Codespaces (automatic tool installation):
 
 1. Click the **"Code"** button on GitHub
 2. Select **"Open with Codespaces"**
-3. The environment will automatically configure everything you need
-4. See [.vscode/CODESPACES.md](./.vscode/CODESPACES.md) for detailed instructions
+3. Wait for tools to install (2-3 minutes)
+4. Follow setup instructions in [CODESPACES_SETUP.md](./CODESPACES_SETUP.md)
+
+**Note**: Codespaces only installs tools. You must manually configure the application.
 
 ### Local Development Setup
 

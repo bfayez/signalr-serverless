@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# Post-create script for GitHub Codespaces
-echo "🚀 Setting up Azure SignalR Serverless development environment..."
+# Post-create script for GitHub Codespaces - Tool Installation Only
+echo "🚀 Installing development tools for Azure SignalR Serverless..."
 
 # Install Azure Functions Core Tools
 echo "📦 Installing Azure Functions Core Tools..."
@@ -15,36 +15,38 @@ sudo apt-get install -y azure-functions-core-tools-4
 echo "📦 Installing Angular CLI..."
 npm install -g @angular/cli
 
-# Restore .NET dependencies
-echo "📦 Restoring .NET dependencies..."
-cd /workspaces/*/functions && dotnet restore
-
-# Install Node.js dependencies for Angular client
-echo "📦 Installing Angular dependencies..."
-cd /workspaces/*/client && npm install
-
-# Create local.settings.json if it doesn't exist
-echo "⚙️ Setting up local.settings.json..."
-cd /workspaces/*/functions
-if [ ! -f "local.settings.json" ]; then
-    cp local.settings.json.example local.settings.json
-    echo "✅ Created local.settings.json from example"
-    echo "⚠️  Remember to add your Azure SignalR connection string to local.settings.json"
-fi
-
-# Display versions
+# Display installed versions
 echo ""
-echo "✅ Environment setup complete!"
+echo "✅ Tool installation complete!"
 echo ""
 echo "📋 Installed versions:"
-echo "  .NET: $(dotnet --version)"
+echo "  .NET SDK: $(dotnet --version)"
 echo "  Node.js: $(node --version)"
 echo "  npm: $(npm --version)"
 echo "  Angular CLI: $(ng version --minimal 2>/dev/null | head -1)"
 echo "  Azure Functions Core Tools: $(func --version)"
+echo "  Azure CLI: $(az version --output tsv --query '\"azure-cli\"' 2>/dev/null || echo 'installed')"
 echo ""
-echo "🎯 Next steps:"
-echo "  1. Add your Azure SignalR connection string to functions/local.settings.json"
-echo "  2. Press F5 or use 'Run and Debug' to start debugging"
-echo "  3. Use the integrated terminal to run 'npm start' in the client directory"
+echo "📚 Next Steps - See CODESPACES_SETUP.md for detailed instructions:"
+echo ""
+echo "  1️⃣  Configure Azure SignalR Service"
+echo "      - Create Azure SignalR Service (Free tier)"
+echo "      - Copy connection string"
+echo ""
+echo "  2️⃣  Setup Backend"
+echo "      cd functions"
+echo "      dotnet restore"
+echo "      cp local.settings.json.example local.settings.json"
+echo "      # Edit local.settings.json with your connection string"
+echo ""
+echo "  3️⃣  Setup Frontend"
+echo "      cd client"
+echo "      npm install"
+echo ""
+echo "  4️⃣  Run the Application"
+echo "      # Backend: cd functions && func start"
+echo "      # Frontend: cd client && npm start"
+echo "      # Or press F5 to debug"
+echo ""
+echo "📖 For complete instructions, see: CODESPACES_SETUP.md"
 echo ""
