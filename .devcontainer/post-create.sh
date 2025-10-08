@@ -15,6 +15,16 @@ sudo apt-get install -y azure-functions-core-tools-4
 echo "📦 Installing Angular CLI..."
 npm install -g @angular/cli
 
+# Install Azurite (Azure Storage Emulator)
+echo "📦 Installing Azurite (Azure Storage Emulator)..."
+npm install -g azurite
+
+# Start Azurite in the background
+echo "🚀 Starting Azurite Storage Emulator..."
+mkdir -p ~/azurite
+nohup azurite --silent --location ~/azurite --blobHost 0.0.0.0 --queueHost 0.0.0.0 --tableHost 0.0.0.0 > ~/azurite/azurite.log 2>&1 &
+echo "✅ Azurite started on ports 10000 (Blob), 10001 (Queue), 10002 (Table)"
+
 # Display installed versions
 echo ""
 echo "✅ Tool installation complete!"
@@ -26,6 +36,7 @@ echo "  npm: $(npm --version)"
 echo "  Angular CLI: $(ng version --minimal 2>/dev/null | head -1)"
 echo "  Azure Functions Core Tools: $(func --version)"
 echo "  Azure CLI: $(az version --output tsv --query '\"azure-cli\"' 2>/dev/null || echo 'installed')"
+echo "  Azurite: $(azurite --version 2>/dev/null | head -1 || echo 'installed')"
 echo ""
 echo "📚 Next Steps - See CODESPACES_SETUP.md for detailed instructions:"
 echo ""
@@ -38,6 +49,7 @@ echo "      cd functions"
 echo "      dotnet restore"
 echo "      cp local.settings.json.example local.settings.json"
 echo "      # Edit local.settings.json with your connection string"
+echo "      # Storage emulator (Azurite) is already running!"
 echo ""
 echo "  3️⃣  Setup Frontend"
 echo "      cd client"
@@ -48,5 +60,6 @@ echo "      # Backend: cd functions && func start"
 echo "      # Frontend: cd client && npm start"
 echo "      # Or press F5 to debug"
 echo ""
+echo "💡 Note: Azurite (Azure Storage Emulator) is running and ready for local development"
 echo "📖 For complete instructions, see: CODESPACES_SETUP.md"
 echo ""

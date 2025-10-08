@@ -8,9 +8,12 @@ When you open this project in GitHub Codespaces, the following tools are automat
 - ✅ Azure Functions Core Tools v4
 - ✅ Angular CLI
 - ✅ Azure CLI
+- ✅ **Azurite (Azure Storage Emulator)** - Auto-started
 - ✅ VS Code extensions
 
 **⚠️ You must manually configure and run the application - See [CODESPACES_SETUP.md](CODESPACES_SETUP.md)**
+
+> **Note:** Azurite runs automatically, so local storage (`UseDevelopmentStorage=true`) works out of the box!
 
 ## Quick Setup Steps
 
@@ -83,6 +86,9 @@ cd client && npm run build
 |------|---------|-----|
 | 7071 | Azure Functions | http://localhost:7071 |
 | 4200 | Angular Client | http://localhost:4200 |
+| 10000 | Azurite Blob Storage | http://localhost:10000 |
+| 10001 | Azurite Queue Storage | http://localhost:10001 |
+| 10002 | Azurite Table Storage | http://localhost:10002 |
 
 Access ports via the **PORTS** tab in the terminal panel.
 

@@ -69,10 +69,10 @@ The easiest way to get started is using GitHub Codespaces (automatic tool instal
 
 1. Click the **"Code"** button on GitHub
 2. Select **"Open with Codespaces"**
-3. Wait for tools to install (2-3 minutes)
+3. Wait for tools to install (2-3 minutes) - **Azurite (Storage Emulator) auto-starts!**
 4. Follow setup instructions in [CODESPACES_SETUP.md](./CODESPACES_SETUP.md)
 
-**Note**: Codespaces only installs tools. You must manually configure the application.
+**Note**: Codespaces installs all tools including Azurite. You only need to configure SignalR connection string.
 
 ### Local Development Setup
 
@@ -106,12 +106,19 @@ cp local.settings.json.example local.settings.json
 
 # Edit local.settings.json and add your SignalR connection string
 # AzureSignalRConnectionString: "Endpoint=https://...;AccessKey=...;Version=1.0;"
+# Note: AzureWebJobsStorage uses "UseDevelopmentStorage=true" for Azurite (local emulator)
 
 # Build the functions
 dotnet build
 
-# Start the functions locally
+# Start the functions locally (Azurite must be running separately if not in Codespaces)
 func start
+```
+
+**For local development outside Codespaces**: Install and run Azurite separately:
+```bash
+npm install -g azurite
+azurite --silent --location ~/azurite
 ```
 
 The functions will be available at `http://localhost:7071`

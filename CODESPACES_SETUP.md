@@ -10,9 +10,12 @@ When you open this project in GitHub Codespaces, the environment automatically i
 - ✅ Azure Functions Core Tools v4
 - ✅ Angular CLI
 - ✅ Azure CLI
+- ✅ **Azurite (Azure Storage Emulator)** - Auto-started for local storage
 - ✅ Required VS Code extensions
 
 **You need to manually configure and run the application following the steps below.**
+
+> **Note:** Azurite is automatically installed and running in the background, so `AzureWebJobsStorage: "UseDevelopmentStorage=true"` works out of the box!
 
 ---
 
@@ -108,7 +111,9 @@ Replace the placeholder with your actual Azure SignalR connection string:
 }
 ```
 
-**Important**: Replace `YOUR-SIGNALR` and `YOUR-KEY` with your actual values.
+**Important**: 
+- Replace `YOUR-SIGNALR` and `YOUR-KEY` with your actual values.
+- **`AzureWebJobsStorage: "UseDevelopmentStorage=true"`** uses Azurite (already running) - no changes needed!
 
 ### 2.4 Build the Functions
 

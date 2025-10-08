@@ -4,15 +4,17 @@ Get the SignalR Serverless application running locally in minutes.
 
 ## 🚀 Option 1: GitHub Codespaces (Easiest for Tool Setup)
 
-**GitHub Codespaces automatically installs all required tools but requires manual configuration.**
+**GitHub Codespaces automatically installs all required tools (including Azurite) but requires manual configuration.**
 
 1. Click the **"Code"** button on the GitHub repository
 2. Select **"Create codespace on main"** (or your branch)
-3. Wait for tools to install (2-3 minutes)
+3. Wait for tools to install (2-3 minutes) - **Azurite auto-starts!**
 4. Follow the complete setup guide: [CODESPACES_SETUP.md](./CODESPACES_SETUP.md)
 
-**What's automated**: Tool installation (.NET, Node.js, Azure Functions Core Tools, Angular CLI, Azure CLI)  
+**What's automated**: Tool installation (.NET, Node.js, Azure Functions Core Tools, Angular CLI, Azure CLI, **Azurite**)  
 **What's manual**: Azure SignalR setup, dependency installation, configuration, running the app
+
+> **Note:** Azurite (Azure Storage Emulator) runs automatically in Codespaces, so `UseDevelopmentStorage=true` works immediately!
 
 ## 💻 Option 2: Local Development
 
@@ -25,6 +27,7 @@ Before you begin, ensure you have:
 - ✅ npm installed
 - ✅ An Azure account with an active subscription
 - ✅ Azure CLI installed (for deployment)
+- ✅ **Azurite (Azure Storage Emulator)** - Install with: `npm install -g azurite`
 
 ## Step 1: Create Azure SignalR Service
 
@@ -108,6 +111,11 @@ Edit `functions/local.settings.json`:
   }
 }
 ```
+
+**Important Notes:**
+- Replace `YOUR-SIGNALR` and `YOUR-KEY` with your actual SignalR values
+- `AzureWebJobsStorage: "UseDevelopmentStorage=true"` requires Azurite to be running
+- **Start Azurite in a separate terminal**: `azurite --silent --location ~/azurite`
 
 Build and start the functions:
 
