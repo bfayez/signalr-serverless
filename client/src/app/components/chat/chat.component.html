@@ -1,0 +1,133 @@
+<div class="chat-container">
+  <h1>Azure SignalR Service - Group Chat</h1>
+
+  <!-- Configuration Section -->
+  <div class="config-section">
+    <h2>Configuration</h2>
+    <div class="form-group">
+      <label>API Base URL:</label>
+      <input type="text" [(ngModel)]="apiUrl" [disabled]="isConnected" placeholder="http://localhost:7071/api">
+    </div>
+    <div class="form-group">
+      <label>User ID:</label>
+      <input type="text" [(ngModel)]="userId" [disabled]="isConnected" placeholder="Enter your user ID">
+    </div>
+    <div class="form-group">
+      <button (click)="connect()" [disabled]="isConnected" class="btn btn-primary">Connect</button>
+      <button (click)="disconnect()" [disabled]="!isConnected" class="btn btn-secondary">Disconnect</button>
+    </div>
+    <div class="status" [class.connected]="isConnected" [class.disconnected]="!isConnected">
+      Status: {{ isConnected ? 'Connected' : 'Disconnected' }}
+    </div>
+  </div>
+
+  <!-- Group Management Section -->
+  <div class="group-section" *ngIf="isConnected">
+    <h2>Group Management</h2>
+    <div class="form-group">
+      <label>Group Name:</label>
+      <input type="text" [(ngModel)]="groupName" [disabled]="!!currentGroup" placeholder="Enter group name">
+    </div>
+    <div class="form-group">
+      <button (click)="joinGroup()" [disabled]="currentGroup" class="btn btn-primary">Join Group</button>
+      <button (click)="leaveGroup()" [disabled]="!currentGroup" class="btn btn-secondary">Leave Group</button>
+    </div>
+    <div class="current-group" *ngIf="currentGroup">
+      Current Group: <strong>{{ currentGroup }}</strong>
+    </div>
+  </div>
+
+  <!-- Chat Section -->
+  <div class="chat-section" *ngIf="currentGroup">
+    <h2>Chat Messages</h2>
+    <div class="messages-container">
+      <div *ngFor="let msg of messages" class="message" [class.system-message]="msg.sender === 'System'">
+        <span class="sender">{{ msg.sender }}:</span>
+        <span class="text">{{ msg.message }}</span>
+        <span class="timestamp">{{ msg.timestamp | date:'short' }}</span>
+      </div>
+    </div>
+    <div class="message-input">
+      <input 
+        type="text" 
+        [(ngModel)]="messageText" 
+        (keyup.enter)="sendMessage()" 
+        placeholder="Type a message..."
+        class="message-field">
+      <button (click)="sendMessage()" [disabled]="!messageText.trim()" class="btn btn-primary">Send</button>
+    </div>
+  </div>
+
+  <!-- Diagnostics Section -->
+  <div class="diagnostics-section">
+    <h2>Diagnostics & Monitoring</h2>
+    <div class="diagnostic-buttons">
+      <button (click)="checkHealth()" class="btn btn-info">Check Health</button>
+      <button (click)="toggleLogs()" class="btn btn-info">{{ showLogs ? 'Hide' : 'Show' }} Logs</button>
+      <button (click)="toggleDiagnostics()" class="btn btn-info">{{ showDiagnostics ? 'Hide' : 'Show' }} Diagnostics</button>
+    </div>
+
+    <!-- Health Status -->
+    <div class="health-status" *ngIf="showHealth && healthStatus">
+      <h3>Health Status</h3>
+      <div class="health-info" [ngClass]="getHealthStatusClass()">
+        <p><strong>Status:</strong> {{ healthStatus.status }}</p>
+        <p><strong>Service:</strong> {{ healthStatus.service }}</p>
+        <p><strong>Version:</strong> {{ healthStatus.version }}</p>
+        <p><strong>Timestamp:</strong> {{ healthStatus.timestamp | date:'medium' }}</p>
+        <div class="health-checks">
+          <p><strong>Checks:</strong></p>
+          <ul>
+            <li *ngFor="let check of healthStatus.checks | keyvalue">
+              {{ check.key }}: {{ check.value }}
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Logs -->
+    <div class="logs-container" *ngIf="showLogs">
+      <h3>SignalR Communication Logs</h3>
+      <button (click)="clearLogs()" class="btn btn-secondary btn-sm">Clear Logs</button>
+      <div class="logs">
+        <div *ngFor="let log of logs" class="log-entry" [ngClass]="getLogClass(log.level)">
+          <span class="log-timestamp">{{ log.timestamp | date:'medium' }}</span>
+          <span class="log-level">[{{ log.level.toUpperCase() }}]</span>
+          <span class="log-message">{{ log.message }}</span>
+          <pre *ngIf="log.details" class="log-details">{{ log.details | json }}</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- Diagnostic Tools -->
+    <div class="diagnostic-tools" *ngIf="showDiagnostics">
+      <h3>Diagnostic Tools</h3>
+      <div class="tool-section">
+        <h4>Connection Testing</h4>
+        <p>Simulate connection issues to test reconnection logic and error handling.</p>
+        <button (click)="simulateConnectionIssue()" [disabled]="!isConnected" class="btn btn-warning">
+          Simulate Connection Issue
+        </button>
+      </div>
+      <div class="tool-section">
+        <h4>Throttling Testing</h4>
+        <p>Send many messages rapidly to test throttling limits and error handling.</p>
+        <button (click)="simulateThrottling()" [disabled]="!currentGroup" class="btn btn-warning">
+          Simulate Throttling (100 messages)
+        </button>
+      </div>
+      <div class="tool-section">
+        <h4>Live Trace Tool Instructions</h4>
+        <p>To use the Azure SignalR Live Trace Tool:</p>
+        <ol>
+          <li>Go to Azure Portal → Your SignalR Service</li>
+          <li>Navigate to "Live trace settings" in the left menu</li>
+          <li>Enable live trace and configure trace levels</li>
+          <li>Use the live trace viewer to see real-time connection and message data</li>
+          <li>Filter by connection ID, user ID, or message type</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
