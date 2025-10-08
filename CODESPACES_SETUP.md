@@ -6,7 +6,7 @@ This guide provides step-by-step instructions for configuring and running the Az
 
 When you open this project in GitHub Codespaces, the environment automatically installs:
 - ✅ .NET 9.0 SDK
-- ✅ Node.js 18.x
+- ✅ Node.js 22.x (required for Angular 20)
 - ✅ Azure Functions Core Tools v4
 - ✅ Angular CLI
 - ✅ Azure CLI

@@ -21,7 +21,7 @@ Get the SignalR Serverless application running locally in minutes.
 Before you begin, ensure you have:
 
 - ✅ .NET 9.0 SDK or later installed
-- ✅ Node.js 18.x or later installed
+- ✅ Node.js 22.x or later installed (required for Angular 20)
 - ✅ npm installed
 - ✅ An Azure account with an active subscription
 - ✅ Azure CLI installed (for deployment)

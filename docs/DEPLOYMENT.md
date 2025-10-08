@@ -6,7 +6,7 @@ This guide provides step-by-step instructions for deploying the SignalR Serverle
 
 - Azure subscription
 - Azure CLI installed and configured
-- Node.js 18.x or later
+- Node.js 22.x or later (required for Angular 20)
 - Azure Functions Core Tools v4
 - Azure Static Web Apps CLI (for frontend deployment)
 

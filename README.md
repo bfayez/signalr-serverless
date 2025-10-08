@@ -58,7 +58,7 @@ signalr-serverless/
 ### Prerequisites
 
 - .NET 9.0 SDK or later
-- Node.js 18.x or later
+- Node.js 22.x or later (required for Angular 20)
 - Azure subscription (for deployment)
 - Azure Functions Core Tools v4
 - Angular CLI

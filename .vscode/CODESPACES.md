@@ -9,7 +9,7 @@ This project is configured for development in GitHub Codespaces with automatic t
 Click the "Code" button on GitHub and select "Open with Codespaces" to create a new codespace. The environment will automatically install:
 
 - ✅ .NET 9.0 SDK
-- ✅ Node.js 18.x
+- ✅ Node.js 22.x (required for Angular 20)
 - ✅ Azure Functions Core Tools v4
 - ✅ Angular CLI
 - ✅ Azure CLI

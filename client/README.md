@@ -15,7 +15,7 @@ This is the Angular frontend application for the SignalR Serverless group messag
 
 ## Prerequisites
 
-- Node.js 18.x or later
+- Node.js 22.x or later (required for Angular 20)
 - Angular CLI (latest version)
 - Running Azure Functions backend
 

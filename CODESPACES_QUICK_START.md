@@ -4,7 +4,7 @@
 
 When you open this project in GitHub Codespaces, the following tools are automatically installed:
 - ✅ .NET 9.0 SDK
-- ✅ Node.js 18.x
+- ✅ Node.js 22.x (required for Angular 20)
 - ✅ Azure Functions Core Tools v4
 - ✅ Angular CLI
 - ✅ Azure CLI
