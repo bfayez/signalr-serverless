@@ -178,6 +178,8 @@ You have **three options** to run the application:
 3. Select **"Run Full Stack"**
 4. Both backend and frontend will start
 
+📖 **Learn more about VS Code tasks:** [.vscode/README.md](.vscode/README.md)
+
 ### Option 3: Manual Terminal Commands
 
 **Terminal 1 - Start Azure Functions:**

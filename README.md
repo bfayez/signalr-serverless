@@ -220,6 +220,16 @@ This project is provided as-is for educational and demonstration purposes.
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
+## 🛠️ Development Tools
+
+This project includes VS Code configuration for enhanced development experience:
+
+- **Tasks** - Automated build and run tasks
+- **Debug Configurations** - Pre-configured debugging setups
+- **Extensions** - Recommended extensions for optimal productivity
+
+📖 **See [.vscode/README.md](.vscode/README.md) for complete VS Code configuration guide**
+
 ## 📞 Support
 
 For issues and questions:

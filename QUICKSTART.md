@@ -148,6 +148,8 @@ If you're using GitHub Codespaces, you can start both services easily:
 2. Type "Tasks: Run Task"
 3. Select "Run Full Stack"
 
+📖 **Learn about VS Code tasks:** [.vscode/README.md](.vscode/README.md)
+
 **Option 3: Manual Terminals** (same as local development)
 
 ## Step 3: Setup Angular Client

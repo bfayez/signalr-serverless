@@ -111,6 +111,8 @@ Run via Command Palette (`Ctrl+Shift+P` → "Tasks: Run Task"):
 - **npm: start - client** - Start Angular
 - **npm: build - client** - Build Angular
 
+📖 **For detailed task documentation, see [.vscode/README.md](.vscode/README.md)**
+
 ## Troubleshooting
 
 ### Functions won't start

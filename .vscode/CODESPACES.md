@@ -179,6 +179,8 @@ VS Code tasks are configured for common operations. Access via:
 - **npm: build - client** - Build Angular for production
 - **Run Full Stack** - Start both backend and frontend
 
+📖 **For detailed information about tasks, see [README.md](./README.md#-tasksjson---purpose-and-usage)**
+
 ## 🌐 Port Forwarding
 
 The codespace automatically forwards these ports:
