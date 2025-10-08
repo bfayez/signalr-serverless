@@ -1,6 +1,6 @@
-# Azure Functions - SignalR Serverless Backend
+# Azure Functions - SignalR Serverless Backend (.NET 9.0)
 
-This directory contains the Azure Functions backend for the SignalR Serverless application.
+This directory contains the Azure Functions backend for the SignalR Serverless application, implemented in C# using .NET 9.0.
 
 ## Functions Overview
 
@@ -56,7 +56,7 @@ This directory contains the Azure Functions backend for the SignalR Serverless a
 ## Local Development
 
 ### Prerequisites
-- Node.js 18.x or later
+- .NET 9.0 SDK
 - Azure Functions Core Tools v4
 - Azure SignalR Service instance
 
@@ -64,7 +64,7 @@ This directory contains the Azure Functions backend for the SignalR Serverless a
 
 1. **Install dependencies:**
    ```bash
-   npm install
+   dotnet restore
    ```
 
 2. **Configure local settings:**
@@ -78,7 +78,7 @@ This directory contains the Azure Functions backend for the SignalR Serverless a
      "IsEncrypted": false,
      "Values": {
        "AzureWebJobsStorage": "UseDevelopmentStorage=true",
-       "FUNCTIONS_WORKER_RUNTIME": "node",
+       "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
        "AzureSignalRConnectionString": "Endpoint=https://<your-signalr>.service.signalr.net;AccessKey=<key>;Version=1.0;"
      }
    }
@@ -86,7 +86,7 @@ This directory contains the Azure Functions backend for the SignalR Serverless a
 
 4. **Build the functions:**
    ```bash
-   npm run build
+   dotnet build
    ```
 
 5. **Start locally:**
@@ -155,17 +155,17 @@ az functionapp cors add \
 
 ```
 functions/
-├── src/
-│   ├── negotiate.ts      # SignalR connection negotiation
-│   ├── sendMessage.ts    # Send messages to groups
-│   ├── joinGroup.ts      # Join a group
-│   ├── leaveGroup.ts     # Leave a group
-│   └── health.ts         # Health check
-├── dist/                 # Compiled JavaScript (auto-generated)
-├── host.json             # Function host configuration
-├── package.json          # Dependencies
-├── tsconfig.json         # TypeScript configuration
-└── local.settings.json   # Local settings (not committed)
+├── NegotiateFunction.cs      # SignalR connection negotiation
+├── SendMessageFunction.cs    # Send messages to groups
+├── JoinGroupFunction.cs      # Join a group
+├── LeaveGroupFunction.cs     # Leave a group
+├── HealthFunction.cs         # Health check
+├── Models.cs                 # Data models
+├── Program.cs                # Function host configuration
+├── SignalRServerless.csproj  # Project file
+├── host.json                 # Function host configuration
+├── local.settings.json       # Local settings (not committed)
+└── README.md                 # This file
 ```
 
 ## Configuration
@@ -179,13 +179,10 @@ functions/
     "applicationInsights": {
       "samplingSettings": {
         "isEnabled": true,
+        "excludedTypes": "Request",
         "maxTelemetryItemsPerSecond": 20
       }
     }
-  },
-  "extensionBundle": {
-    "id": "Microsoft.Azure.Functions.ExtensionBundle",
-    "version": "[4.*, 5.0.0)"
   }
 }
 ```
@@ -196,7 +193,7 @@ functions/
 |----------|-------------|----------|
 | AzureSignalRConnectionString | SignalR Service connection string | Yes |
 | AzureWebJobsStorage | Storage account for Functions | Yes |
-| FUNCTIONS_WORKER_RUNTIME | Runtime (node) | Yes |
+| FUNCTIONS_WORKER_RUNTIME | Runtime (dotnet-isolated) | Yes |
 | APPINSIGHTS_INSTRUMENTATIONKEY | Application Insights key | No |
 
 ## Monitoring
@@ -235,12 +232,12 @@ Key metrics to monitor:
 ## Troubleshooting
 
 ### Function not starting
-- Verify Node.js version: 18.x
-- Check `host.json` for correct extension bundle version
+- Verify .NET 9.0 SDK is installed: `dotnet --version`
+- Check `host.json` for correct configuration
 - Ensure connection string is set correctly
 
 ### SignalR binding not working
-- Verify extension bundle is v4 or higher
+- Verify SignalR extension package is installed
 - Check connection string setting name matches binding configuration
 - Ensure SignalR service mode is set to "Serverless"
 
@@ -250,14 +247,23 @@ Key metrics to monitor:
 
 ## Development Notes
 
-- Functions use anonymous authentication for development
+- Functions use isolated worker process (.NET 9.0)
+- Anonymous authentication for development
 - Implement proper authentication for production
 - Use Azure Key Vault for secrets in production
 - Enable managed identity for Azure services
 - Implement rate limiting for production workloads
 
+## Technology Stack
+
+- **.NET 9.0** - Latest .NET version
+- **Azure Functions v4** - Isolated worker process
+- **SignalR Service Extension** - For SignalR bindings
+- **Application Insights** - For monitoring and diagnostics
+
 ## Additional Resources
 
 - [Azure Functions Documentation](https://docs.microsoft.com/azure/azure-functions/)
 - [Azure SignalR Service](https://docs.microsoft.com/azure/azure-signalr/)
-- [SignalR Bindings](https://docs.microsoft.com/azure/azure-functions/functions-bindings-signalr-service)
+- [SignalR Bindings for .NET](https://docs.microsoft.com/azure/azure-functions/functions-bindings-signalr-service)
+- [.NET 9.0 Documentation](https://docs.microsoft.com/dotnet/core/whats-new/dotnet-9)

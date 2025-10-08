@@ -6,6 +6,7 @@ Get the SignalR Serverless application running locally in minutes.
 
 Before you begin, ensure you have:
 
+- ✅ .NET 9.0 SDK or later installed
 - ✅ Node.js 18.x or later installed
 - ✅ npm installed
 - ✅ An Azure account with an active subscription
@@ -64,8 +65,8 @@ az signalr key list \
 # Navigate to functions directory
 cd functions
 
-# Install dependencies
-npm install
+# Restore dependencies
+dotnet restore
 
 # Create local settings file
 cp local.settings.json.example local.settings.json
@@ -81,7 +82,7 @@ Edit `functions/local.settings.json`:
   "IsEncrypted": false,
   "Values": {
     "AzureWebJobsStorage": "UseDevelopmentStorage=true",
-    "FUNCTIONS_WORKER_RUNTIME": "node",
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
     "AzureSignalRConnectionString": "Endpoint=https://YOUR-SIGNALR.service.signalr.net;AccessKey=YOUR-KEY;Version=1.0;"
   },
   "Host": {
@@ -95,12 +96,12 @@ Edit `functions/local.settings.json`:
 Build and start the functions:
 
 ```bash
-# Build TypeScript
-npm run build
+# Build .NET project
+dotnet build
 
 # Start functions locally (requires Azure Functions Core Tools)
 # If you don't have it: npm install -g azure-functions-core-tools@4
-npm start
+func start
 ```
 
 You should see:
@@ -190,9 +191,8 @@ The application will open at `http://localhost:4200`
 **Solution**:
 ```bash
 cd functions
-rm -rf node_modules package-lock.json
-npm install
-npm run build
+dotnet restore
+dotnet build
 ```
 
 ### Issue: Cannot connect to SignalR

@@ -78,10 +78,10 @@ A complete Azure SignalR Service Serverless application has been successfully im
 
 ### Backend Technologies
 - ✅ Azure Functions v4
-- ✅ Node.js 18
-- ✅ TypeScript 5.x
-- ✅ @azure/functions
-- ✅ SignalR Service bindings
+- ✅ .NET 9.0
+- ✅ C# 13
+- ✅ Isolated worker process
+- ✅ SignalR Service Extension
 
 ### Frontend Technologies
 - ✅ Angular 19 (latest)

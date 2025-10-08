@@ -24,6 +24,17 @@ dist/
 build/
 out/
 
+# .NET / C#
+bin/
+obj/
+*.user
+*.suo
+*.userprefs
+*.sln.ide/
+*.dll
+*.pdb
+*.exe
+
 # IDE
 .vscode/
 .idea/

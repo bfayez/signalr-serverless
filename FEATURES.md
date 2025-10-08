@@ -419,9 +419,9 @@ SignalRServiceDiagnosticLogs
 
 **Backend**:
 - Azure Functions v4
-- Node.js 18
-- TypeScript 5.x
-- @azure/functions
+- .NET 9.0
+- C# 13
+- Isolated worker process
 
 **Azure Services**:
 - Azure SignalR Service (Serverless mode)

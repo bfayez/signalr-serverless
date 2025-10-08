@@ -182,9 +182,9 @@ signalr-serverless/
 
 **Backend**:
 - Azure Functions v4
-- Node.js 18
-- TypeScript 5.x
-- @azure/functions
+- .NET 9.0
+- C# 13
+- Isolated worker process
 - Azure SignalR Service bindings
 
 **Frontend**:
@@ -212,11 +212,11 @@ signalr-serverless/
 2. **Setup Backend**
    ```bash
    cd functions
-   npm install
+   dotnet restore
    cp local.settings.json.example local.settings.json
    # Add SignalR connection string
-   npm run build
-   npm start
+   dotnet build
+   func start
    ```
 
 3. **Setup Frontend**

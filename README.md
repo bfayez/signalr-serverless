@@ -4,7 +4,7 @@ This project demonstrates a complete implementation of Azure SignalR Service in 
 
 ## 🏗️ Architecture
 
-- **Backend**: Azure Functions (Node.js/TypeScript) with SignalR Service bindings
+- **Backend**: Azure Functions (C#/.NET 9.0) with SignalR Service bindings
 - **Frontend**: Angular (Latest version) with SignalR client library
 - **SignalR Service**: Azure SignalR Service (Serverless mode, Free tier)
 
@@ -57,6 +57,7 @@ signalr-serverless/
 
 ### Prerequisites
 
+- .NET 9.0 SDK or later
 - Node.js 18.x or later
 - Azure subscription (for deployment)
 - Azure Functions Core Tools v4
@@ -86,8 +87,8 @@ az signalr key list \
 ```bash
 cd functions
 
-# Install dependencies
-npm install
+# Restore dependencies
+dotnet restore
 
 # Copy and configure local settings
 cp local.settings.json.example local.settings.json
@@ -96,10 +97,10 @@ cp local.settings.json.example local.settings.json
 # AzureSignalRConnectionString: "Endpoint=https://...;AccessKey=...;Version=1.0;"
 
 # Build the functions
-npm run build
+dotnet build
 
 # Start the functions locally
-npm start
+func start
 ```
 
 The functions will be available at `http://localhost:7071`

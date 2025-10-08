@@ -94,8 +94,8 @@ az functionapp create \
   --resource-group $RESOURCE_GROUP \
   --storage-account $STORAGE_ACCOUNT_NAME \
   --consumption-plan-location $LOCATION \
-  --runtime node \
-  --runtime-version 18 \
+  --runtime dotnet-isolated \
+  --runtime-version 9.0 \
   --functions-version 4 \
   --os-type Linux
 ```
@@ -125,8 +125,8 @@ az functionapp cors add \
 
 ```bash
 cd functions
-npm install
-npm run build
+dotnet restore
+dotnet build
 ```
 
 ### 2.2 Deploy to Azure
@@ -135,11 +135,15 @@ npm run build
 # Deploy using Azure Functions Core Tools
 func azure functionapp publish $FUNCTION_APP_NAME
 
-# Or use Azure CLI
+# Or use Azure CLI with dotnet publish
+dotnet publish -c Release
+cd bin/Release/net9.0/publish
+zip -r ../../../deploy.zip .
+cd ../../..
 az functionapp deployment source config-zip \
   --name $FUNCTION_APP_NAME \
   --resource-group $RESOURCE_GROUP \
-  --src ./dist.zip
+  --src deploy.zip
 ```
 
 ### 2.3 Verify Deployment
