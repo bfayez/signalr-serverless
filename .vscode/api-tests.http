@@ -1,0 +1,64 @@
+### Azure SignalR Serverless API Tests
+### Use the REST Client extension to test these endpoints
+
+@functionsUrl = http://localhost:7071
+@groupName = test-group
+@userId = test-user-1
+@message = Hello from REST Client!
+
+### Health Check
+GET {{functionsUrl}}/api/health
+
+### Negotiate SignalR Connection
+POST {{functionsUrl}}/api/negotiate
+Content-Type: application/json
+
+### Join Group
+POST {{functionsUrl}}/api/joinGroup
+Content-Type: application/json
+
+{
+  "groupName": "{{groupName}}",
+  "userId": "{{userId}}"
+}
+
+### Send Message to Group
+POST {{functionsUrl}}/api/sendMessage
+Content-Type: application/json
+
+{
+  "groupName": "{{groupName}}",
+  "message": "{{message}}",
+  "sender": "{{userId}}"
+}
+
+### Leave Group
+POST {{functionsUrl}}/api/leaveGroup
+Content-Type: application/json
+
+{
+  "groupName": "{{groupName}}",
+  "userId": "{{userId}}"
+}
+
+### Test with Different User
+@userId2 = test-user-2
+
+### User 2 - Join Group
+POST {{functionsUrl}}/api/joinGroup
+Content-Type: application/json
+
+{
+  "groupName": "{{groupName}}",
+  "userId": "{{userId2}}"
+}
+
+### User 2 - Send Message
+POST {{functionsUrl}}/api/sendMessage
+Content-Type: application/json
+
+{
+  "groupName": "{{groupName}}",
+  "message": "Hi from User 2!",
+  "sender": "{{userId2}}"
+}

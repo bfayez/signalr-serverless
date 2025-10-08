@@ -36,12 +36,15 @@ obj/
 *.exe
 
 # IDE
-.vscode/
 .idea/
 *.swp
 *.swo
 *~
 .DS_Store
+
+# VS Code - allow .vscode/ for this project (contains dev configs)
+# Individual files can be ignored if needed
+# .vscode/*
 
 # Environment files
 .env

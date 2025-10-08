@@ -2,6 +2,19 @@
 
 Get the SignalR Serverless application running locally in minutes.
 
+## 🚀 Option 1: GitHub Codespaces (Easiest)
+
+**The fastest way to get started - no local setup required!**
+
+1. Click the **"Code"** button on the GitHub repository
+2. Select **"Create codespace on main"** (or your branch)
+3. Wait for the environment to load (2-3 minutes)
+4. Skip to [Step 2: Configure Azure SignalR](#step-2-configure-azure-signalr)
+
+See [CODESPACES_QUICK_START.md](./CODESPACES_QUICK_START.md) for detailed Codespaces instructions.
+
+## 💻 Option 2: Local Development
+
 ## Prerequisites
 
 Before you begin, ensure you have:
@@ -59,7 +72,9 @@ az signalr key list \
 
 **Save the connection string** - you'll need it in the next step.
 
-## Step 2: Setup Azure Functions Backend
+## Step 2: Configure Azure SignalR
+
+*Note: If using GitHub Codespaces, this step is done after the codespace loads*
 
 ```bash
 # Navigate to functions directory
@@ -116,6 +131,23 @@ Functions:
 ```
 
 **Keep this terminal running** and open a new terminal for the next step.
+
+### 🎯 Running in GitHub Codespaces
+
+If you're using GitHub Codespaces, you can start both services easily:
+
+**Option 1: Use Debugging (Recommended)**
+1. Press `F5` or click "Run and Debug" in the sidebar
+2. Select **"Debug Full Stack"** from the dropdown
+3. Both services start automatically with debugging enabled
+4. Ports 7071 and 4200 are automatically forwarded
+
+**Option 2: Use Tasks**
+1. Press `Ctrl+Shift+P` (or `Cmd+Shift+P` on Mac)
+2. Type "Tasks: Run Task"
+3. Select "Run Full Stack"
+
+**Option 3: Manual Terminals** (same as local development)
 
 ## Step 3: Setup Angular Client
 

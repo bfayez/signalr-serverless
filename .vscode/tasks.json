@@ -1,0 +1,135 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "clean (functions)",
+      "command": "dotnet",
+      "type": "process",
+      "args": [
+        "clean",
+        "${workspaceFolder}/functions/SignalRServerless.csproj",
+        "/property:GenerateFullPaths=true",
+        "/consoleloggerparameters:NoSummary"
+      ],
+      "problemMatcher": "$msCompile",
+      "options": {
+        "cwd": "${workspaceFolder}/functions"
+      }
+    },
+    {
+      "label": "build (functions)",
+      "command": "dotnet",
+      "type": "process",
+      "args": [
+        "build",
+        "${workspaceFolder}/functions/SignalRServerless.csproj",
+        "/property:GenerateFullPaths=true",
+        "/consoleloggerparameters:NoSummary"
+      ],
+      "dependsOn": "clean (functions)",
+      "problemMatcher": "$msCompile",
+      "options": {
+        "cwd": "${workspaceFolder}/functions"
+      }
+    },
+    {
+      "label": "clean release (functions)",
+      "command": "dotnet",
+      "type": "process",
+      "args": [
+        "clean",
+        "--configuration",
+        "Release",
+        "${workspaceFolder}/functions/SignalRServerless.csproj",
+        "/property:GenerateFullPaths=true",
+        "/consoleloggerparameters:NoSummary"
+      ],
+      "problemMatcher": "$msCompile",
+      "options": {
+        "cwd": "${workspaceFolder}/functions"
+      }
+    },
+    {
+      "label": "publish (functions)",
+      "command": "dotnet",
+      "type": "process",
+      "args": [
+        "publish",
+        "--configuration",
+        "Release",
+        "${workspaceFolder}/functions/SignalRServerless.csproj",
+        "/property:GenerateFullPaths=true",
+        "/consoleloggerparameters:NoSummary"
+      ],
+      "dependsOn": "clean release (functions)",
+      "problemMatcher": "$msCompile",
+      "options": {
+        "cwd": "${workspaceFolder}/functions"
+      }
+    },
+    {
+      "type": "func",
+      "label": "func: host start",
+      "command": "host start",
+      "problemMatcher": "$func-dotnet-watch",
+      "isBackground": true,
+      "dependsOn": "build (functions)",
+      "options": {
+        "cwd": "${workspaceFolder}/functions"
+      }
+    },
+    {
+      "type": "npm",
+      "script": "start",
+      "path": "client/",
+      "label": "npm: start - client",
+      "isBackground": true,
+      "problemMatcher": {
+        "owner": "custom",
+        "pattern": {
+          "regexp": "^.*$"
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": ".*",
+          "endsPattern": ".*Local.*"
+        }
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "dedicated",
+        "showReuseMessage": true,
+        "clear": false
+      }
+    },
+    {
+      "type": "npm",
+      "script": "build",
+      "path": "client/",
+      "label": "npm: build - client",
+      "problemMatcher": []
+    },
+    {
+      "type": "shell",
+      "label": "Install Dependencies",
+      "command": "dotnet restore && cd client && npm install",
+      "options": {
+        "cwd": "${workspaceFolder}/functions"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Run Full Stack",
+      "dependsOn": [
+        "func: host start",
+        "npm: start - client"
+      ],
+      "problemMatcher": [],
+      "presentation": {
+        "group": "development"
+      }
+    }
+  ]
+}

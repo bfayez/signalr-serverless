@@ -63,6 +63,15 @@ signalr-serverless/
 - Azure Functions Core Tools v4
 - Angular CLI
 
+### 🚀 Quick Start with GitHub Codespaces
+
+The easiest way to get started is using GitHub Codespaces:
+
+1. Click the **"Code"** button on GitHub
+2. Select **"Open with Codespaces"**
+3. The environment will automatically configure everything you need
+4. See [.vscode/CODESPACES.md](./.vscode/CODESPACES.md) for detailed instructions
+
 ### Local Development Setup
 
 #### 1. Setup Azure SignalR Service

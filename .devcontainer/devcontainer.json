@@ -1,12 +1,53 @@
 {
-  "name": "Codespace .NET 9.0",
+  "name": "Azure SignalR Serverless - .NET 9.0 + Node.js",
   "image": "mcr.microsoft.com/devcontainers/dotnet:9.0-bookworm",
+  
+  "features": {
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "18"
+    },
+    "ghcr.io/devcontainers/features/azure-cli:1": {
+      "version": "latest"
+    },
+    "ghcr.io/azure/azure-dev/azd:latest": {}
+  },
+
   "customizations": {
     "vscode": {
       "extensions": [
-        "ms-dotnettools.csdevkit"
-      ]
+        "ms-dotnettools.csdevkit",
+        "ms-dotnettools.csharp",
+        "ms-azuretools.vscode-azurefunctions",
+        "ms-azuretools.vscode-azurestaticwebapps",
+        "angular.ng-template",
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "ms-vscode.azure-account"
+      ],
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "bash",
+        "azureFunctions.deploySubpath": "functions/bin/Release/net9.0/publish",
+        "azureFunctions.projectLanguage": "C#",
+        "azureFunctions.projectRuntime": "~4",
+        "debug.internalConsoleOptions": "neverOpen",
+        "debug.console.wordWrap": false
+      }
     }
   },
-  "postCreateCommand": "dotnet --info"
+
+  "forwardPorts": [7071, 4200],
+  "portsAttributes": {
+    "7071": {
+      "label": "Azure Functions",
+      "onAutoForward": "notify"
+    },
+    "4200": {
+      "label": "Angular Client",
+      "onAutoForward": "notify"
+    }
+  },
+
+  "postCreateCommand": "bash .devcontainer/post-create.sh",
+
+  "remoteUser": "vscode"
 }
