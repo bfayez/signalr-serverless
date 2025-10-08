@@ -1,0 +1,12 @@
+{
+  "name": "Codespace .NET 9.0",
+  "image": "mcr.microsoft.com/devcontainers/dotnet:9.0-bookworm",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-dotnettools.csdevkit"
+      ]
+    }
+  },
+  "postCreateCommand": "dotnet --info"
+}
