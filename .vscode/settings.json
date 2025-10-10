@@ -1,0 +1,58 @@
+{
+  "azureFunctions.deploySubpath": "functions/bin/Release/net9.0/publish",
+  "azureFunctions.projectLanguage": "C#",
+  "azureFunctions.projectRuntime": "~4",
+  "azureFunctions.preDeployTask": "publish (functions)",
+  
+  "debug.internalConsoleOptions": "neverOpen",
+  "debug.console.wordWrap": false,
+  
+  "files.exclude": {
+    "**/bin": true,
+    "**/obj": true,
+    "**/.angular": true,
+    "**/node_modules": true
+  },
+  
+  "files.watcherExclude": {
+    "**/bin/**": true,
+    "**/obj/**": true,
+    "**/.angular/**": true,
+    "**/node_modules/**": true
+  },
+  
+  "dotnet.defaultSolution": "functions/SignalRServerless.csproj",
+  
+  "[csharp]": {
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": "explicit"
+    }
+  },
+  
+  "[typescript]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  
+  "[html]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  
+  "[json]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  
+  "terminal.integrated.env.linux": {
+    "ASPNETCORE_ENVIRONMENT": "Development"
+  },
+  
+  "rest-client.environmentVariables": {
+    "$shared": {
+      "functionsUrl": "http://localhost:7071",
+      "clientUrl": "http://localhost:4200"
+    }
+  }
+}
