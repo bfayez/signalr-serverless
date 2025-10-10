@@ -26,3 +26,22 @@ export interface LogEntry {
   message: string;
   details?: any;
 }
+
+export interface SimulatedUser {
+  userId: string;
+  connectionId?: string;
+  isConnected: boolean;
+  messagesSent: number;
+  lastMessageTime?: Date;
+  errors: number;
+}
+
+export interface UserSimulationStatus {
+  isRunning: boolean;
+  startTime?: Date;
+  totalUsers: number;
+  connectedUsers: number;
+  totalMessagesSent: number;
+  totalErrors: number;
+  users: SimulatedUser[];
+}

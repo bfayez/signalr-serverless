@@ -118,6 +118,46 @@
         </button>
       </div>
       <div class="tool-section">
+        <h4>100 Users Simulation</h4>
+        <p>Simulate multiple users connecting and sending messages to test system load.</p>
+        <div class="form-group">
+          <label>Number of Users:</label>
+          <input type="number" [(ngModel)]="simulationUserCount" [disabled]="!!simulationStatus?.isRunning" min="1" max="200" class="simulation-input">
+        </div>
+        <div class="form-group">
+          <label>Duration (minutes):</label>
+          <input type="number" [(ngModel)]="simulationDuration" [disabled]="!!simulationStatus?.isRunning" min="1" max="60" class="simulation-input">
+        </div>
+        <button (click)="startUserSimulation()" [disabled]="!currentGroup || simulationStatus?.isRunning" class="btn btn-warning">
+          Start User Simulation
+        </button>
+        <button (click)="stopUserSimulation()" [disabled]="!simulationStatus?.isRunning" class="btn btn-danger">
+          Stop Simulation
+        </button>
+        
+        <!-- Simulation Status -->
+        <div class="simulation-status" *ngIf="simulationStatus && simulationStatus.isRunning">
+          <h5>Simulation Running</h5>
+          <div class="status-grid">
+            <div class="status-item">
+              <strong>Total Users:</strong> {{ simulationStatus.totalUsers }}
+            </div>
+            <div class="status-item">
+              <strong>Connected:</strong> {{ simulationStatus.connectedUsers }}
+            </div>
+            <div class="status-item">
+              <strong>Messages Sent:</strong> {{ simulationStatus.totalMessagesSent }}
+            </div>
+            <div class="status-item">
+              <strong>Errors:</strong> {{ simulationStatus.totalErrors }}
+            </div>
+            <div class="status-item" *ngIf="simulationStatus.startTime">
+              <strong>Started:</strong> {{ simulationStatus.startTime | date:'short' }}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="tool-section">
         <h4>Live Trace Tool Instructions</h4>
         <p>To use the Azure SignalR Live Trace Tool:</p>
         <ol>
