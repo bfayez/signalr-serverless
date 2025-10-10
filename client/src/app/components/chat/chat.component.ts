@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { SignalrService } from '../../services/signalr.service';
 import { HealthService, HealthStatus } from '../../services/health.service';
-import { ChatMessage, ConnectionState, LogEntry } from '../../models/signalr.models';
+import { ChatMessage, ConnectionState, LogEntry, UserSimulationStatus } from '../../models/signalr.models';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -28,6 +28,11 @@ export class ChatComponent implements OnInit, OnDestroy {
   showLogs = false;
   showHealth = false;
   showDiagnostics = false;
+  
+  // User simulation properties
+  simulationStatus?: UserSimulationStatus;
+  simulationUserCount = 100;
+  simulationDuration = 5;
   
   private subscriptions: Subscription[] = [];
 
@@ -86,6 +91,13 @@ export class ChatComponent implements OnInit, OnDestroy {
         if (status) {
           this.healthStatus = status;
         }
+      })
+    );
+
+    // Subscribe to simulation status
+    this.subscriptions.push(
+      this.signalrService.simulationStatus$.subscribe((status) => {
+        this.simulationStatus = status;
       })
     );
   }
@@ -234,6 +246,46 @@ export class ChatComponent implements OnInit, OnDestroy {
       case 'degraded': return 'health-degraded';
       case 'unhealthy': return 'health-unhealthy';
       default: return '';
+    }
+  }
+
+  async startUserSimulation(): Promise<void> {
+    if (!this.currentGroup) {
+      alert('Please join a group first');
+      return;
+    }
+
+    if (this.simulationStatus?.isRunning) {
+      alert('User simulation is already running');
+      return;
+    }
+
+    const confirmed = confirm(
+      `This will simulate ${this.simulationUserCount} users connecting to group "${this.currentGroup}" and sending messages every 20 seconds for ${this.simulationDuration} minutes.\n\n` +
+      `This will generate a lot of traffic. Continue?`
+    );
+
+    if (confirmed) {
+      try {
+        await this.signalrService.startUserSimulation(
+          this.currentGroup,
+          this.simulationUserCount,
+          this.simulationDuration
+        );
+      } catch (error) {
+        console.error('User simulation error:', error);
+        alert('Failed to start user simulation. Check console for details.');
+      }
+    }
+  }
+
+  async stopUserSimulation(): Promise<void> {
+    if (confirm('Stop the user simulation?')) {
+      try {
+        await this.signalrService.stopUserSimulation();
+      } catch (error) {
+        console.error('Error stopping simulation:', error);
+      }
     }
   }
 }

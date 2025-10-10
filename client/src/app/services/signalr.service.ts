@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import * as signalR from '@microsoft/signalr';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
-import { ChatMessage, ConnectionState, LogEntry, UserJoinedEvent, UserLeftEvent } from '../models/signalr.models';
+import { ChatMessage, ConnectionState, LogEntry, UserJoinedEvent, UserLeftEvent, SimulatedUser, UserSimulationStatus } from '../models/signalr.models';
 
 @Injectable({
   providedIn: 'root'
@@ -24,6 +24,19 @@ export class SignalrService {
   private apiBaseUrl = 'http://localhost:7071/api';
   private currentUserId?: string;
   private currentGroup?: string;
+
+  // User simulation properties
+  private simulationStatus = new BehaviorSubject<UserSimulationStatus>({
+    isRunning: false,
+    totalUsers: 0,
+    connectedUsers: 0,
+    totalMessagesSent: 0,
+    totalErrors: 0,
+    users: []
+  });
+  public simulationStatus$ = this.simulationStatus.asObservable();
+  private simulatedUsers: Map<string, { connection: signalR.HubConnection; user: SimulatedUser; intervalId?: any }> = new Map();
+  private simulationGroupName?: string;
 
   constructor() {
     this.addLog('info', 'SignalR Service initialized');
@@ -332,5 +345,239 @@ export class SignalrService {
   setApiBaseUrl(url: string): void {
     this.apiBaseUrl = url;
     this.addLog('info', `API base URL updated to: ${url}`);
+  }
+
+  // Simulate 100 users connecting and sending messages
+  async startUserSimulation(groupName: string, userCount: number = 100, durationMinutes: number = 5): Promise<void> {
+    if (this.simulationStatus.value.isRunning) {
+      this.addLog('warn', 'User simulation is already running');
+      return;
+    }
+
+    this.addLog('info', `Starting simulation: ${userCount} users for ${durationMinutes} minutes in group ${groupName}`);
+    this.simulationGroupName = groupName;
+
+    // Initialize status
+    const users: SimulatedUser[] = [];
+    for (let i = 1; i <= userCount; i++) {
+      users.push({
+        userId: `user-${i}`,
+        isConnected: false,
+        messagesSent: 0,
+        errors: 0
+      });
+    }
+
+    this.simulationStatus.next({
+      isRunning: true,
+      startTime: new Date(),
+      totalUsers: userCount,
+      connectedUsers: 0,
+      totalMessagesSent: 0,
+      totalErrors: 0,
+      users
+    });
+
+    // Connect all users
+    for (let i = 1; i <= userCount; i++) {
+      const userId = `user-${i}`;
+      try {
+        await this.connectSimulatedUser(userId, groupName);
+      } catch (error) {
+        this.addLog('error', `Failed to connect simulated user ${userId}`, error);
+        this.updateSimulatedUserError(userId);
+      }
+    }
+
+    // Stop simulation after duration
+    setTimeout(() => {
+      this.stopUserSimulation();
+    }, durationMinutes * 60 * 1000);
+  }
+
+  private async connectSimulatedUser(userId: string, groupName: string): Promise<void> {
+    try {
+      // Get connection info
+      const response = await fetch(`${this.apiBaseUrl}/negotiate?userId=${encodeURIComponent(userId)}`, {
+        method: 'POST'
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to negotiate for ${userId}: ${response.statusText}`);
+      }
+
+      const connectionInfo = await response.json();
+
+      // Build connection
+      const hubConnection = new signalR.HubConnectionBuilder()
+        .withUrl(connectionInfo.url, {
+          accessTokenFactory: () => connectionInfo.accessToken
+        })
+        .configureLogging(signalR.LogLevel.Error) // Reduce logging for simulated users
+        .withAutomaticReconnect()
+        .build();
+
+      // Start connection
+      await hubConnection.start();
+
+      // Join group
+      const joinResponse = await fetch(`${this.apiBaseUrl}/joinGroup`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          groupName: groupName,
+          userId: userId
+        })
+      });
+
+      if (!joinResponse.ok) {
+        throw new Error(`Failed to join group for ${userId}`);
+      }
+
+      // Update user status
+      const user: SimulatedUser = {
+        userId,
+        connectionId: hubConnection.connectionId || undefined,
+        isConnected: true,
+        messagesSent: 0,
+        errors: 0
+      };
+
+      // Start sending messages every 20 seconds
+      const intervalId = setInterval(async () => {
+        await this.sendSimulatedUserMessage(userId, groupName);
+      }, 20000); // 20 seconds
+
+      this.simulatedUsers.set(userId, { connection: hubConnection, user, intervalId });
+      this.updateSimulationStatus();
+      
+      this.addLog('debug', `Simulated user ${userId} connected`);
+    } catch (error) {
+      this.addLog('error', `Failed to connect simulated user ${userId}`, error);
+      this.updateSimulatedUserError(userId);
+      throw error;
+    }
+  }
+
+  private async sendSimulatedUserMessage(userId: string, groupName: string): Promise<void> {
+    const simulatedUser = this.simulatedUsers.get(userId);
+    if (!simulatedUser || !this.simulationStatus.value.isRunning) {
+      return;
+    }
+
+    try {
+      const message = `Hello from ${userId}! This is an automated message.`;
+      
+      const response = await fetch(`${this.apiBaseUrl}/sendMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          groupName: groupName,
+          message: message,
+          sender: userId
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to send message for ${userId}: ${response.statusText}`);
+      }
+
+      // Update user stats
+      simulatedUser.user.messagesSent++;
+      simulatedUser.user.lastMessageTime = new Date();
+      this.updateSimulationStatus();
+      
+    } catch (error) {
+      this.addLog('error', `Failed to send message for ${userId}`, error);
+      simulatedUser.user.errors++;
+      this.updateSimulatedUserError(userId);
+    }
+  }
+
+  private updateSimulatedUserError(userId: string): void {
+    const status = this.simulationStatus.value;
+    const user = status.users.find(u => u.userId === userId);
+    if (user) {
+      user.errors++;
+      this.simulationStatus.next({
+        ...status,
+        totalErrors: status.totalErrors + 1
+      });
+    }
+  }
+
+  private updateSimulationStatus(): void {
+    const status = this.simulationStatus.value;
+    const users: SimulatedUser[] = [];
+    let connectedUsers = 0;
+    let totalMessagesSent = 0;
+    let totalErrors = 0;
+
+    status.users.forEach(u => {
+      const simulatedUser = this.simulatedUsers.get(u.userId);
+      if (simulatedUser) {
+        users.push(simulatedUser.user);
+        if (simulatedUser.user.isConnected) connectedUsers++;
+        totalMessagesSent += simulatedUser.user.messagesSent;
+        totalErrors += simulatedUser.user.errors;
+      } else {
+        users.push(u);
+        totalErrors += u.errors;
+      }
+    });
+
+    this.simulationStatus.next({
+      ...status,
+      connectedUsers,
+      totalMessagesSent,
+      totalErrors,
+      users
+    });
+  }
+
+  async stopUserSimulation(): Promise<void> {
+    if (!this.simulationStatus.value.isRunning) {
+      return;
+    }
+
+    this.addLog('info', 'Stopping user simulation...');
+
+    // Stop all message intervals and disconnect users
+    for (const [userId, { connection, intervalId }] of this.simulatedUsers.entries()) {
+      try {
+        // Clear interval
+        if (intervalId) {
+          clearInterval(intervalId);
+        }
+
+        // Leave group
+        if (this.simulationGroupName) {
+          await fetch(`${this.apiBaseUrl}/leaveGroup`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              groupName: this.simulationGroupName,
+              userId: userId
+            })
+          });
+        }
+
+        // Disconnect
+        await connection.stop();
+      } catch (error) {
+        this.addLog('error', `Error disconnecting simulated user ${userId}`, error);
+      }
+    }
+
+    this.simulatedUsers.clear();
+    
+    const finalStatus = this.simulationStatus.value;
+    this.addLog('info', `User simulation stopped. Messages sent: ${finalStatus.totalMessagesSent}, Errors: ${finalStatus.totalErrors}`);
+    
+    this.simulationStatus.next({
+      ...finalStatus,
+      isRunning: false,
+      connectedUsers: 0
+    });
   }
 }
