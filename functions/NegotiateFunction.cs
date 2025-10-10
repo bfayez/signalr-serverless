@@ -1,3 +1,4 @@
+using System.Net;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Azure.Functions.Worker.Extensions.SignalRService;
@@ -15,11 +16,15 @@ public class NegotiateFunction
     }
 
     [Function("negotiate")]
-    public SignalRConnectionInfo Negotiate(
+    public async Task<HttpResponseData> Negotiate(
         [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post")] HttpRequestData req,
         [SignalRConnectionInfoInput(HubName = "chat")] SignalRConnectionInfo connectionInfo)
     {
         _logger.LogInformation("Negotiate function triggered");
-        return connectionInfo;
+        
+        var response = req.CreateResponse(HttpStatusCode.OK);
+        await response.WriteAsJsonAsync(connectionInfo);
+        
+        return response;
     }
 }
