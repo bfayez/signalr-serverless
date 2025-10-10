@@ -34,8 +34,8 @@ export class SignalrService {
       this.currentUserId = userId;
       this.addLog('info', `Starting connection for user: ${userId}`);
 
-      // Get connection info from negotiate function
-      const response = await fetch(`${this.apiBaseUrl}/negotiate`, {
+      // Get connection info from negotiate function with userId
+      const response = await fetch(`${this.apiBaseUrl}/negotiate?userId=${encodeURIComponent(userId)}`, {
         method: 'POST'
       });
 
